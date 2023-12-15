@@ -3,19 +3,19 @@ const Signin = document.getElementById("sign-in-btn");
 const NewuserNAme = document.getElementById("new-user-name");
 const NewuserEmail = document.getElementById("new-user-email");
 const NewuserPassword = document.getElementById("new-user-password");
-const Usermail = document.getElementById("user-email");
+const UserEmail = document.getElementById("user-email");
 const Userpassword = document.getElementById("user-password");
 const loginData = {
-    username: 'your_username',
+    email: 'your_username',
     password: 'your_password',
   };
 Signin.addEventListener('click',()=>{
-   console.log(Usermail.value);
+   console.log(email.value);
    console.log(Userpassword.value)
-if(Usermail.value == "" || Usermail == ""){
+if(UserEmail.value == "" || UserEmail == ""){
     alert("must not be empty");
 }else{
-  loginData.username = Usermail.value;
+  loginData.email = UserEmail.value;
   loginData.password = Userpassword.value;
 
 }
