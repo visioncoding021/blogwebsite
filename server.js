@@ -1,12 +1,23 @@
 const express = require('express');
 const path = require('path');
 const fileupload = require('express-fileupload');
-
+const Users = require('./models/Users');
+const {v4 : uuidv4} = require('uuid');
+const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const db_connect = require('./config/db');
 let initial_path = path.join(__dirname, "public");
 
 const app = express();
+
 app.use(express.static(initial_path));
+app.use(express.json());
+app.use(express.urlencoded({extended : false}));
 app.use(fileupload());
+
+db_connect();
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(initial_path, "home.html"));
@@ -40,6 +51,58 @@ app.post('/upload', (req, res) => {
     }
 })
 
+app.post('/signup' , async (req , res) => {
+    const { username , email , password } = req.body;
+    const userId = uuidv4();
+    const saltRound = 10;
+    const hashedPassword = await bcrypt.hash(password,saltRound);
+    try {
+        console.log("in sign up route");
+        const sanitizedEmail = email.toLowerCase();
+        const userExist = await Users.findOne({email: sanitizedEmail}).exec() ;
+        
+        console.log(userExist);
+        if(userExist){
+            return res.status(400).send('user already exists');
+        }
+        const data = await Users.create({email : sanitizedEmail, hashed_password : hashedPassword , user_id : userId , name : username});
+        const token = jwt.sign({user_id : userId},process.env.SECRET_KEY,{
+            expiresIn: '1d'
+        });
+        res.status(201).json({token : token , user_id : userId , email : sanitizedEmail });
+        console.log("done");
+    } catch (error) {
+        console.log(error);
+    }
+
+})
+app.post('/login' , async (req , res) => {
+    try {
+        console.log("here in login route")
+        const { email , password } = req.body;
+        const sanitizedEmail = email.toLowerCase();
+        console.log(sanitizedEmail);
+        const userExist = await Users.findOne({ email : sanitizedEmail }).exec();
+        console.log(userExist);
+        if(!userExist){
+            res.json({message : "user not exist"});
+        }else{
+            const correctPassword =  await bcrypt.compare(password,userExist.hashed_password);
+            const { user_id }  = userExist;
+            if(correctPassword){
+                const token = jwt.sign({ user_id },process.env.SECRET_KEY,{
+                    expiresIn: '1d',
+                });
+                res.status(201).json({token , user_id , email : sanitizedEmail });
+            }else{
+                res.send("Not Valid Credentials");
+            }
+        }
+        
+    } catch (error) {
+        console.log(error);
+    }   
+})
 app.post('/publish' , (req,res) => {
     
 })
