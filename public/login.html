@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/login.css">
+    <title>STREAM LOGIN</title>
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form>
+                <h1>Create Account</h1>
+                <input type="text" placeholder="Name" id="new-user-name">
+                <input type="email" placeholder="Email" id="new-user-email">
+                <input type="password" placeholder="Password" id="new-user-password">
+                <button id = "sign-up-btn">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form>
+                <h1>Sign In</h1>
+            
+                <input type="email" placeholder="Email" id="user-email">
+                <input type="password" placeholder="Password" id="user-password">
+                <a href="#">Forget Your Password?</a>
+                <button id="sign-in-btn">Sign In</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Unlocking the gateway to knowledge – because logging in is the first step to a world of endless blogs and boundless insights</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Embark on your digital journey: where creativity meets registration, and your account is the key to a universe of personalized experiences!</p>
+                    <button class="hidden" id="register">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/login.js"></script>
+    <script src="js/loginreq.js"></script>
+</body>
+
+</html>
